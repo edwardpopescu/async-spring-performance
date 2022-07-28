@@ -20,15 +20,32 @@ public class GatlingSimulation extends Simulation {
 
 
 
-    ScenarioBuilder scn = CoreDsl.scenario("Load Test Creating Customers")
-//            .feed(FeederBuilder.)
+    ScenarioBuilder scnJersey = CoreDsl.scenario("Load Test Creating Customers")
+            .exec(HttpDsl.http("create-customer-request")
+                    .get("/hello/jersey")
+                    .check(status().is(200))
+            );
+
+    ScenarioBuilder scnJerseyAsync = CoreDsl.scenario("Load Test Creating Customers")
             .exec(HttpDsl.http("create-customer-request")
                     .get("/hello/jersey/async")
                     .check(status().is(200))
             );
 
+    ScenarioBuilder scnMvc = CoreDsl.scenario("Load Test Creating Customers")
+            .exec(HttpDsl.http("create-customer-request")
+                    .get("/hello/mvc")
+                    .check(status().is(200))
+            );
+
+    ScenarioBuilder scnMvcAsync = CoreDsl.scenario("Load Test Creating Customers")
+            .exec(HttpDsl.http("create-customer-request")
+                    .get("/hello/mvc/async")
+                    .check(status().is(200))
+            );
+
     public GatlingSimulation() {
-        this.setUp(scn.injectOpen(constantUsersPerSec(1000).during(Duration.ofSeconds(30))))
+        this.setUp(scnMvcAsync.injectOpen(constantUsersPerSec(100).during(Duration.ofSeconds(30))))
                 .protocols(httpProtocol);
     }
 }
