@@ -13,11 +13,24 @@ import static io.gatling.javaapi.core.CoreDsl.constantUsersPerSec;
 import static io.gatling.javaapi.http.HttpDsl.status;
 
 public class GatlingSimulation extends Simulation {
-    HttpProtocolBuilder httpProtocol = HttpDsl.http
-            .baseUrl("http://localhost:8080")
+
+    private static final int USERS_PER_SEC = 200;
+    private static final int DURATION = 60;
+
+    HttpProtocolBuilder httpSetupJersey = HttpDsl.http
+            .baseUrl("http://localhost:8081")
             .acceptHeader("application/json")
             .userAgentHeader("Gatling/Performance Test");
 
+    HttpProtocolBuilder httpSetupMvc = HttpDsl.http
+            .baseUrl("http://localhost:8082")
+            .acceptHeader("application/json")
+            .userAgentHeader("Gatling/Performance Test");
+
+    HttpProtocolBuilder httpSetupWebflux = HttpDsl.http
+            .baseUrl("http://localhost:8083")
+            .acceptHeader("application/json")
+            .userAgentHeader("Gatling/Performance Test");
 
     ScenarioBuilder scnJersey = CoreDsl.scenario("Load Test Creating Customers")
             .exec(HttpDsl.http("jersey")
@@ -50,23 +63,23 @@ public class GatlingSimulation extends Simulation {
             );
 
 //    public GatlingSimulation() {
-//        this.setUp(scnJersey.injectOpen(constantUsersPerSec(100).during(Duration.ofSeconds(30))))
-//                .protocols(httpProtocol);
+//        this.setUp(scnJersey.injectOpen(constantUsersPerSec(USERS_PER_SEC).during(Duration.ofSeconds(DURATION))))
+//                .protocols(httpSetupJersey);
 //    }
 //    public GatlingSimulation() {
-//        this.setUp(scnJerseyAsync.injectOpen(constantUsersPerSec(1000).during(Duration.ofSeconds(30))))
-//                .protocols(httpProtocol);
+//        this.setUp(scnJerseyAsync.injectOpen(constantUsersPerSec(USERS_PER_SEC).during(Duration.ofSeconds(DURATION))))
+//                .protocols(httpSetupJersey);
 //    }
 //    public GatlingSimulation() {
-//        this.setUp(scnMvc.injectOpen(constantUsersPerSec(100).during(Duration.ofSeconds(30))))
-//                .protocols(httpProtocol);
+//        this.setUp(scnMvc.injectOpen(constantUsersPerSec(USERS_PER_SEC).during(Duration.ofSeconds(DURATION))))
+//                .protocols(httpSetupMvc);
+//    }
+//    public GatlingSimulation() {
+//        this.setUp(scnMvcAsync.injectOpen(constantUsersPerSec(USERS_PER_SEC).during(Duration.ofSeconds(DURATION))))
+//                .protocols(httpSetupMvc);
 //    }
     public GatlingSimulation() {
-        this.setUp(scnMvcAsync.injectOpen(constantUsersPerSec(1000).during(Duration.ofSeconds(30))))
-                .protocols(httpProtocol);
+        this.setUp(scnWebFlux.injectOpen(constantUsersPerSec(USERS_PER_SEC).during(Duration.ofSeconds(DURATION))))
+                .protocols(httpSetupWebflux);
     }
-//    public GatlingSimulation() {
-//        this.setUp(scnWebFlux.injectOpen(constantUsersPerSec(1000).during(Duration.ofSeconds(30))))
-//                .protocols(httpProtocol);
-//    }
 }
