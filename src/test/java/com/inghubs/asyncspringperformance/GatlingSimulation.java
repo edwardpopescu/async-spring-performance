@@ -14,23 +14,23 @@ import static io.gatling.javaapi.http.HttpDsl.status;
 
 public class GatlingSimulation extends Simulation {
 
-    private static final int USERS_PER_SEC = 200;
-    private static final int DURATION = 60;
+    private static final int USERS_PER_SEC = 100;
+    private static final int DURATION = 600;
 
     HttpProtocolBuilder httpSetupJersey = HttpDsl.http
             .baseUrl("http://localhost:8081")
             .acceptHeader("application/json")
-            .userAgentHeader("Gatling/Performance Test");
+            .userAgentHeader("Gatling");
 
     HttpProtocolBuilder httpSetupMvc = HttpDsl.http
             .baseUrl("http://localhost:8082")
             .acceptHeader("application/json")
-            .userAgentHeader("Gatling/Performance Test");
+            .userAgentHeader("Gatling");
 
     HttpProtocolBuilder httpSetupWebflux = HttpDsl.http
             .baseUrl("http://localhost:8083")
             .acceptHeader("application/json")
-            .userAgentHeader("Gatling/Performance Test");
+            .userAgentHeader("Gatling");
 
     ScenarioBuilder scnJersey = CoreDsl.scenario("Load Test Creating Customers")
             .exec(HttpDsl.http("jersey")
