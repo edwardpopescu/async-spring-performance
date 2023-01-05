@@ -7,14 +7,13 @@ import io.gatling.javaapi.core.Simulation;
 import io.gatling.javaapi.http.HttpDsl;
 import io.gatling.javaapi.http.HttpProtocolBuilder;
 
-import java.time.Duration;
 
-import static io.gatling.javaapi.core.CoreDsl.constantUsersPerSec;
+import static io.gatling.javaapi.core.CoreDsl.rampUsersPerSec;
 import static io.gatling.javaapi.http.HttpDsl.status;
 
 public class GatlingSimulation extends Simulation {
 
-    private static final int USERS_PER_SEC = 100;
+    private static final int USERS_PER_SEC = 150;
     private static final int DURATION = 600;
 
     HttpProtocolBuilder httpSetupJersey = HttpDsl.http
@@ -62,24 +61,24 @@ public class GatlingSimulation extends Simulation {
                     .check(status().is(200))
             );
 
-//    public GatlingSimulation() {
-//        this.setUp(scnJersey.injectOpen(constantUsersPerSec(USERS_PER_SEC).during(Duration.ofSeconds(DURATION))))
-//                .protocols(httpSetupJersey);
-//    }
-//    public GatlingSimulation() {
-//        this.setUp(scnJerseyAsync.injectOpen(constantUsersPerSec(USERS_PER_SEC).during(Duration.ofSeconds(DURATION))))
-//                .protocols(httpSetupJersey);
-//    }
-//    public GatlingSimulation() {
-//        this.setUp(scnMvc.injectOpen(constantUsersPerSec(USERS_PER_SEC).during(Duration.ofSeconds(DURATION))))
-//                .protocols(httpSetupMvc);
-//    }
-//    public GatlingSimulation() {
-//        this.setUp(scnMvcAsync.injectOpen(constantUsersPerSec(USERS_PER_SEC).during(Duration.ofSeconds(DURATION))))
-//                .protocols(httpSetupMvc);
-//    }
     public GatlingSimulation() {
-        this.setUp(scnWebFlux.injectOpen(constantUsersPerSec(USERS_PER_SEC).during(Duration.ofSeconds(DURATION))))
-                .protocols(httpSetupWebflux);
+        this.setUp(scnJersey.injectOpen(rampUsersPerSec(USERS_PER_SEC/10.0).to(USERS_PER_SEC).during(DURATION)))
+                .protocols(httpSetupJersey);
     }
+//    public GatlingSimulation() {
+//        this.setUp(scnJerseyAsync.injectOpen(rampUsersPerSec(USERS_PER_SEC/10.0).to(USERS_PER_SEC).during(DURATION)))
+//                .protocols(httpSetupJersey);
+//    }
+//    public GatlingSimulation() {
+//        this.setUp(scnMvc.injectOpen(rampUsersPerSec(USERS_PER_SEC/10.0).to(USERS_PER_SEC).during(DURATION)))
+//                .protocols(httpSetupMvc);
+//    }
+//    public GatlingSimulation() {
+//        this.setUp(scnMvcAsync.injectOpen(rampUsersPerSec(USERS_PER_SEC/10.0).to(USERS_PER_SEC).during(DURATION)))
+//                .protocols(httpSetupMvc);
+//    }
+//    public GatlingSimulation() {
+//        this.setUp(scnWebFlux.injectOpen(rampUsersPerSec(USERS_PER_SEC/10.0).to(USERS_PER_SEC).during(DURATION)))
+//                .protocols(httpSetupWebflux);
+//    }
 }

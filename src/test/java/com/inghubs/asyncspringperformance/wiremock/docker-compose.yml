@@ -1,0 +1,10 @@
+version: '3.4'
+services:
+  spring_wiremock:
+    container_name: spring_wiremock
+    image: 'wiremock/wiremock:latest'
+    ports:
+      - '8080:8080'
+    volumes:
+      - './wiremock/mappings:/home/wiremock/mappings'
+    command: '--no-request-journal --disable-request-logging --container-threads=250 --jetty-acceptor-threads=100 --jetty-accept-queue-size=500  --async-response-enabled=true --async-response-threads=200'
